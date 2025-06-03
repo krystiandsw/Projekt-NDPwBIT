@@ -64,3 +64,12 @@ def read_json(file_path):
 def write_json(data, file_path):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
+
+import yaml
+
+def read_yaml(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        raise ValueError(f"Invalid YAML file: {e}")

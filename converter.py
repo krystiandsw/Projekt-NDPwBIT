@@ -115,3 +115,25 @@ def etree_to_dict(element):
             result[element.tag] = element.text.strip()
 
     return result
+
+def write_xml(data, file_path):
+    root = dict_to_etree("root", data)
+    tree = ET.ElementTree(root)
+    tree.write(file_path, encoding="utf-8", xml_declaration=True)
+
+def dict_to_etree(tag, d):
+    elem = ET.Element(tag)
+    if isinstance(d, dict):
+        for key, val in d.items():
+            if key.startswith("@"):
+                elem.set(key[1:], str(val))
+            elif key == "#text":
+                elem.text = str(val)
+            elif isinstance(val, list):
+                for item in val:
+                    elem.append(dict_to_etree(key, item))
+            else:
+                elem.append(dict_to_etree(key, val))
+    else:
+        elem.text = str(d)
+    return elem

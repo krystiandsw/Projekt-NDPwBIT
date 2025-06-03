@@ -73,3 +73,7 @@ def read_yaml(file_path):
             return yaml.safe_load(f)
     except Exception as e:
         raise ValueError(f"Invalid YAML file: {e}")
+
+def write_yaml(data, file_path):
+    with open(file_path, "w", encoding="utf-8") as f:
+        yaml.dump(data, f, allow_unicode=True)

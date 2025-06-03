@@ -51,3 +51,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+import json
+
+def read_json(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        raise ValueError(f"Invalid JSON file: {e}")

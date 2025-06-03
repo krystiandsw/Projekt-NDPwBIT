@@ -77,3 +77,41 @@ def read_yaml(file_path):
 def write_yaml(data, file_path):
     with open(file_path, "w", encoding="utf-8") as f:
         yaml.dump(data, f, allow_unicode=True)
+
+import xml.etree.ElementTree as ET
+
+def read_xml(file_path):
+    try:
+        tree = ET.parse(file_path)
+        root = tree.getroot()
+        return etree_to_dict(root)
+    except Exception as e:
+        raise ValueError(f"Invalid XML file: {e}")
+
+def etree_to_dict(element):
+    result = {element.tag: {} if element.attrib else None}
+    children = list(element)
+
+    if children:
+        dd = {}
+        for child in map(etree_to_dict, children):
+            for k, v in child.items():
+                if k in dd:
+                    if isinstance(dd[k], list):
+                        dd[k].append(v)
+                    else:
+                        dd[k] = [dd[k], v]
+                else:
+                    dd[k] = v
+        result = {element.tag: dd}
+
+    if element.attrib:
+        result[element.tag].update(("@" + k, v) for k, v in element.attrib.items())
+
+    if element.text and element.text.strip():
+        if children or element.attrib:
+            result[element.tag]["#text"] = element.text.strip()
+        else:
+            result[element.tag] = element.text.strip()
+
+    return result

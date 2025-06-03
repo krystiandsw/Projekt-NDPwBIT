@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
@@ -25,13 +25,6 @@ jobs:
       run: |
         Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
         .\installResources.ps1
-
-    - name: Debug environment
-      shell: powershell
-      run: |
-        python --version
-        pip list
-        dir  # List all files
 
     - name: Build executable
       shell: powershell
@@ -42,7 +35,7 @@ jobs:
       run: dir dist
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: converter-exe
         path: dist/converter.exe
